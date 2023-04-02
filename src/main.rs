@@ -121,6 +121,12 @@ fn build_page(path: Arc<PathBuf>, ospath: Arc<PathBuf>) -> (&'static str, String
             .to_str()
             .unwrap()
             .to_string();
+        
+        // Ignore hidden files
+        if name.starts_with(".") {
+            continue;
+        }
+        
         let path = path.unwrap().path();
         let path = path.to_str().unwrap();
         let ospath = ospath.to_str().unwrap();
