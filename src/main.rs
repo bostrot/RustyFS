@@ -134,6 +134,7 @@ fn build_page(path: Arc<PathBuf>, ospath: Arc<PathBuf>) -> (&'static str, String
     }
 
     // Add to handlebars data
+    data.insert("files".to_string(), files);
     let handlebar_render = match handlebars.render("index", &data) {
         Ok(render) => render,
         Err(e) => {
@@ -141,7 +142,6 @@ fn build_page(path: Arc<PathBuf>, ospath: Arc<PathBuf>) -> (&'static str, String
             return ("HTTP/1.1 500 Internal Server Error", "".to_string());
         }
     };
-    data.insert("files".to_string(), files);
     (
         "HTTP/1.1 200 OK",
         handlebar_render
@@ -164,11 +164,11 @@ fn handle_connection<'a>(mut stream: TcpStream, ospath: Arc<PathBuf>) {
         }
     };
 
-    let (status_line, contents) = if request_line == "GET / HTTP/1.1" {
+    let (status_line, contents) = if request_line.starts_with("GET / HTTP") {
         build_page(Arc::clone(&ospath), ospath)
     } else {
         // Check if the request is for a file
-        let re = Regex::new(r"GET /(.*) HTTP/1.1").unwrap();
+        let re = Regex::new(r"GET /(.*) HTTP").unwrap();
         let cap = re.captures(&request_line).unwrap();
         let file = cap.get(1).unwrap().as_str();
         let file_path = Path::new(&file);
