@@ -1,4 +1,4 @@
-# RustyFS
+# RustyFS - would be a great name for a filesystem
 
 RustyFS is a minimal multithreading file server written in Rust, inspired by the Rust example. It allows for easy and efficient file sharing between clients and servers through its multi-threaded architecture. With RustyFS, users can transfer files with ease while enjoying the speed and safety provided by the Rust programming language.
 
